@@ -17,7 +17,12 @@ type ItemWithID = News | Comments ;
 
 const addItemToArray = async (array: ItemWithID[], item: NewsWithOutID | CommentsWithOutID) => {
     const id = crypto.randomUUID();
-    const dateTime = dayjs().toISOString();
+    let dateTime: string | undefined;
+
+    if ('title' in item) {
+        dateTime = dayjs().toISOString();
+    }
+
     const newItem = {id, dateTime, ...item};
     array.push(newItem);
     await fileDb.save();
@@ -32,6 +37,13 @@ const deleteItemFromArray = async (array: ItemWithID[], id: string) => {
             console.error('Item not found');
         } else {
             if (array === data.news) {
+                const commentsToDelete = data.comments.filter(comment => comment.idNews === id);
+                data.comments = data.comments.filter(comment => comment.idNews !== id);
+
+                if (commentsToDelete.length > 0) {
+                    console.log(`Deleted ${commentsToDelete.length} comments associated with the news.`);
+                }
+
                 data.news = updatedItems as News[];
             } else if (array === data.comments) {
                 data.comments = updatedItems as Comments[];
@@ -46,6 +58,7 @@ const deleteItemFromArray = async (array: ItemWithID[], id: string) => {
         throw new Error('Internal Server Error');
     }
 };
+
 
 const fileDb = {
     async init() {
@@ -76,9 +89,6 @@ const fileDb = {
     },
     async deleteComment(id: string) {
         return deleteItemFromArray(data.comments, id);
-    },
-    async getNewById(id: string) {
-        return data.news.find(newItem => newItem.id === id);
     },
     async save() {
         const dataToSave = {

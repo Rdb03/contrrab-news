@@ -34,13 +34,13 @@ newsRouter.delete('/:id', async (req, res) => {
         }
 
         const deleteNew = await fileDb.deleteNew(newsItem.id);
+
         res.send(deleteNew);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
 
 newsRouter.post('/', imagesUpload.single('image'), async (req, res) => {
 
