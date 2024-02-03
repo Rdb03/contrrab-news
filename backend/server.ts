@@ -1,7 +1,8 @@
 import express from 'express';
-import messageRouter from "./routers/messages";
 import cors from 'cors';
 import fileDb from "./fileDb";
+import newsRouter from "./routes/news";
+import commentsRouter from "./routes/comments";
 
 const app = express();
 const port = 8000;
@@ -9,7 +10,8 @@ const port = 8000;
 app.use(express.json());
 app.use(cors());
 
-app.use('/messages', messageRouter);
+app.use('/news', newsRouter);
+app.use('/comments', commentsRouter)
 
 const run = async () => {
     await fileDb.init();

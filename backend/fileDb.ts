@@ -1,24 +1,24 @@
 import {promises as fs} from 'fs';
-import {Category, CategoryWithOutID, Items, ItemsWithOutID, Place, PlacesWithOutID} from "./type";
+import {Comments, CommentsWithOutID, News, NewsWithOutID} from "./type";
 import crypto from 'crypto';
+import dayjs from "dayjs";
 
 const fileName = './db.json';
 
-const initialCategories: Category[] = [];
-const initialPlaces: Place[] = [];
-const initialItems: Items[] = [];
+const initialNews: News[] = [];
+const initialComments: Comments[] = [];
 
 let data = {
-    categories: initialCategories,
-    items: initialItems,
-    places: initialPlaces
+    news: initialNews,
+    comments: initialComments,
 };
 
-type ItemWithID = Category | Place | Items;
+type ItemWithID = News | Comments ;
 
-const addItemToArray = async (array: ItemWithID[], item: CategoryWithOutID | PlacesWithOutID | ItemsWithOutID) => {
+const addItemToArray = async (array: ItemWithID[], item: NewsWithOutID | CommentsWithOutID) => {
     const id = crypto.randomUUID();
-    const newItem = {id, ...item};
+    const dateTime = dayjs().toISOString();
+    const newItem = {id, dateTime, ...item};
     array.push(newItem);
     await fileDb.save();
     return newItem;
@@ -31,13 +31,12 @@ const deleteItemFromArray = async (array: ItemWithID[], id: string) => {
         if (updatedItems.length === array.length) {
             console.error('Item not found');
         } else {
-            if (array === data.categories) {
-                data.categories = updatedItems as Category[];
-            } else if (array === data.places) {
-                data.places = updatedItems as Place[];
-            } else if (array === data.items) {
-                data.items = updatedItems as Items[];
+            if (array === data.news) {
+                data.news = updatedItems as News[];
+            } else if (array === data.comments) {
+                data.comments = updatedItems as Comments[];
             }
+
             await fileDb.save();
         }
 
@@ -48,22 +47,6 @@ const deleteItemFromArray = async (array: ItemWithID[], id: string) => {
     }
 };
 
-const updateItemById = async (array: ItemWithID[], id: string, newData: any) => {
-    const itemToUpdateIndex = array.findIndex(item => item.id === id);
-
-    if (itemToUpdateIndex === -1) {
-        return null;
-    }
-
-    array[itemToUpdateIndex] = {
-        ...newData,
-        id: id,
-    };
-
-    await fileDb.save();
-    return array[itemToUpdateIndex];
-};
-
 const fileDb = {
     async init() {
         try {
@@ -71,62 +54,36 @@ const fileDb = {
             data = JSON.parse(fileContents.toString());
         } catch (e) {
             data = {
-                categories: [],
-                items: [],
-                places: []
+                news: [],
+                comments: [],
             };
         }
     },
-    async getCategories() {
-        return data.categories;
+    async getNews() {
+        return data.news;
     },
-    async getPlaces() {
-        return data.places;
+    async getComments() {
+        return data.comments;
     },
-    async getItems() {
-        return data.items;
+    async addNews(item: NewsWithOutID) {
+        return addItemToArray.call(this, data.news, item);
     },
-    async addCategory(item: CategoryWithOutID) {
-        return addItemToArray.call(this, data.categories, item);
+    async addComment(item: CommentsWithOutID) {
+        return addItemToArray.call(this, data.comments, item);
     },
-    async addPlace(item: PlacesWithOutID) {
-        return addItemToArray.call(this, data.places, item);
+    async deleteNew(id: string) {
+        return deleteItemFromArray(data.news, id);
     },
-    async addItem(item: ItemsWithOutID) {
-        return addItemToArray.call(this, data.items, item);
+    async deleteComment(id: string) {
+        return deleteItemFromArray(data.comments, id);
     },
-    async deletePlace(id: string) {
-        return deleteItemFromArray(data.places, id);
-    },
-    async deleteCategory(id: string) {
-        return deleteItemFromArray(data.categories, id);
-    },
-    async deleteItem(id: string) {
-        return deleteItemFromArray(data.items, id);
-    },
-    async updateItemById(id: string, newData: ItemsWithOutID) {
-        return updateItemById(data.items, id, newData);
-    },
-    async updatePlaceById(id: string, newData: PlacesWithOutID) {
-        return updateItemById(data.places, id, newData);
-    },
-    async updateCategoryById(id: string, newData: CategoryWithOutID) {
-        return updateItemById(data.categories, id, newData);
-    },
-    async getCategoryById(id: string) {
-        return data.categories.find(category => category.id === id);
-    },
-    async getPlaceById(id: string) {
-        return data.places.find(place => place.id === id);
-    },
-    async getItemsByCategoryId(categoryId: string) {
-        return data.items.filter(item => item.idCategory === categoryId);
+    async getNewById(id: string) {
+        return data.news.find(newItem => newItem.id === id);
     },
     async save() {
         const dataToSave = {
-            categories: data.categories,
-            items: data.items,
-            places: data.places,
+            news: data.news,
+            comments: data.comments,
         };
         return fs.writeFile(fileName, JSON.stringify(dataToSave, null, 2));
     }

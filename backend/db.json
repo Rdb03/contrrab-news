@@ -1,0 +1,20 @@
+{
+  "news": [
+    {
+      "id": "20e8677d-97a3-4625-8f1b-c20f3eefd451",
+      "dateTime": "2024-02-03T07:09:45.074Z",
+      "title": "BREAKING NEWS: New iPhone 16 fire!!!",
+      "content": "All new iPhone 16 fire!!!",
+      "image": "3756e626-8969-4a86-a1c2-2ab2326b01a9.png"
+    }
+  ],
+  "comments": [
+    {
+      "id": "b3dd2466-f152-4ae0-97ee-afc38e77a73f",
+      "dateTime": "2024-02-03T07:13:41.687Z",
+      "idNews": "20e8677d-97a3-4625-8f1b-c20f3eefd451",
+      "author": "James",
+      "text": "OMG I BUY IT YESTERDAY!!!"
+    }
+  ]
+}
