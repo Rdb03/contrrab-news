@@ -1,20 +1,12 @@
 {
   "news": [
     {
-      "id": "20e8677d-97a3-4625-8f1b-c20f3eefd451",
-      "dateTime": "2024-02-03T07:09:45.074Z",
-      "title": "BREAKING NEWS: New iPhone 16 fire!!!",
-      "content": "All new iPhone 16 fire!!!",
-      "image": "3756e626-8969-4a86-a1c2-2ab2326b01a9.png"
+      "id": "de276222-f141-41fa-956b-9a7d177934fc",
+      "dateTime": "2024-02-03T07:49:38.267Z",
+      "title": "BREAKING NEWS: Porsche winner Mercedes",
+      "content": "new Porsche take new record on nurgburgring",
+      "image": "4a223a0a-259b-4f15-985c-caec46ccc9c8.jpg"
     }
   ],
-  "comments": [
-    {
-      "id": "b3dd2466-f152-4ae0-97ee-afc38e77a73f",
-      "dateTime": "2024-02-03T07:13:41.687Z",
-      "idNews": "20e8677d-97a3-4625-8f1b-c20f3eefd451",
-      "author": "James",
-      "text": "OMG I BUY IT YESTERDAY!!!"
-    }
-  ]
+  "comments": []
 }
