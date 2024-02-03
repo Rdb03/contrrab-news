@@ -45,7 +45,7 @@ newsRouter.delete('/:id', async (req, res) => {
 newsRouter.post('/', imagesUpload.single('image'), async (req, res) => {
 
     const { title, content} = req.body;
-    const image = req.file ? req.file.filename : '';
+    const image = req.file ? req.file.filename : null;
 
     if (!title || !content) {
         return res.status(400).json({ error: 'New cannot be empty' });

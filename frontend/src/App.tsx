@@ -1,8 +1,9 @@
 import ItemToolBar from "./components/ItemToolBar/ItemToolBar.tsx";
-import NewsList from "./components/NewsLIst/NewsList.tsx";
 import {Route, Routes} from "react-router-dom";
-import NotFound from "./NotFound/NoFound.tsx";
-import AddNew from "./components/AddNew/AddNew.tsx";
+import AddNew from "./containers/AddNew/AddNew.tsx";
+import FullPost from "./containers/FullPost/FullPost.tsx";
+import NotFound from "./components/NotFound/NoFound.tsx";
+import NewsList from "./containers/NewsLIst/NewsList.tsx";
 
 const App = () => {
   return (
@@ -17,6 +18,9 @@ const App = () => {
               }/>
               <Route path='/add-news' element={
                 <AddNew/>
+              }/>
+              <Route path='/full-post/:id' element={
+                  <FullPost/>
               }/>
               <Route path="*" element={
                   <NotFound/>

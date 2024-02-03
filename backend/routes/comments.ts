@@ -63,6 +63,23 @@ commentsRouter.post('/',async (req, res) => {
     }
 });
 
+commentsRouter.get('/', async (req, res) => {
+    try {
+        const { news_id } = req.query;
+
+        if (news_id) {
+            const comments = await fileDb.getCommentsByNewsId(news_id.toString());
+            res.send(comments);
+        } else {
+            const comments = await fileDb.getComments();
+            res.send(comments);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 
 
 export default commentsRouter;

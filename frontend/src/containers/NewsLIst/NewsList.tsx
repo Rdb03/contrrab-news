@@ -29,7 +29,6 @@ const NewsList = () => {
                         key={newItem.id}
                         id={newItem.id}
                         title={newItem.title}
-                        content={newItem.content}
                         date={newItem.dateTime}
                         image={newItem.image}
                     />

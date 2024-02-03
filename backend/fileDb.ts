@@ -90,6 +90,15 @@ const fileDb = {
     async deleteComment(id: string) {
         return deleteItemFromArray(data.comments, id);
     },
+    async getCommentsByNewsId(news_id: string) {
+        try {
+            const allComments = await this.getComments();
+            return allComments.filter(comment => comment.idNews === news_id);
+        } catch (error) {
+            console.error(error);
+            throw new Error('Internal Server Error');
+        }
+    },
     async save() {
         const dataToSave = {
             news: data.news,

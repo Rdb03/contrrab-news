@@ -4,14 +4,15 @@ import {useAppDispatch, useAppSelector} from "../../app/hook.ts";
 import {selectCreateNewsLoading} from "../../app/newsSlice.ts";
 import {createNews, fetchNews} from "../../app/newsThunk.ts";
 import {Button, CircularProgress, Grid, TextField} from "@mui/material";
-import FileInput from "../FileInput/FileInput.tsx";
 import {useNavigate} from "react-router-dom";
+import FileInput from "../../components/FileInput/FileInput.tsx";
 
 const AddNew = () => {
 
     const [newItem, setNewItem] = useState<INewsWithOutID>({
         title: '',
         content: '',
+        dateTime: '',
         image: null,
     });
     const dispatch = useAppDispatch();
@@ -39,8 +40,8 @@ const AddNew = () => {
     const onSubmitHandler = async (e: React.FormEvent) => {
         e.preventDefault();
         await dispatch(createNews(newItem));
-        navigate('/');
         await dispatch(fetchNews());
+        navigate('/');
     };
 
     return (

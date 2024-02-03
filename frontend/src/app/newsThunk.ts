@@ -10,9 +10,9 @@ export const fetchNews = createAsyncThunk<INews[]>(
         let news: INews[] = [];
 
         if (newsResponse) {
-            news = Object.keys(newsResponse).map((id) =>({
-                ...newsResponse[id],
-                id
+            news = Object.values(newsResponse).map((newsItem) =>({
+                ...newsItem,
+                id: newsItem.id
             }));
         }
 
@@ -22,14 +22,42 @@ export const fetchNews = createAsyncThunk<INews[]>(
 export const createNews = createAsyncThunk<void, INewsWithOutID>(
     'news/create',
     async (news) => {
-        const formData = new FormData();
-        formData.append('title', news.title);
-        formData.append('content', news.content);
+        try {
+            const formData = new FormData();
+            formData.append('title', news.title);
+            formData.append('content', news.content);
 
-        if(news.image) {
-            formData.append('image', news.image);
+            if(news.image) {
+                formData.append('image', news.image);
+            }
+
+            await axiosApi.post('/news', formData);
+        } catch (error) {
+            console.error('Error creating news:', error);
+            throw error;
         }
-
-        await axiosApi.post('/news', formData);
     }
 );
+
+
+export const deleteNews = createAsyncThunk<void, string>(
+    'news/delete',
+    async (newsId) => {
+        await axiosApi.delete(`/news/${newsId}`);
+    }
+);
+
+export const fetchSingleNews = createAsyncThunk<INews, string>(
+    'news/fetchSingle',
+    async (newsId) => {
+        try {
+            const response = await axiosApi.get<INews>(`/news/${newsId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching single news:', error);
+            throw error;
+        }
+    }
+);
+
+

@@ -2,6 +2,9 @@ import {Button, CardMedia, Grid, styled} from "@mui/material";
 import imageNotAvailable from '../../assets/images/no-image-available.png';
 import {apiURL} from "../../constants.ts";
 import React from "react";
+import {useAppDispatch} from "../../app/hook.ts";
+import {deleteNews, fetchNews} from "../../app/newsThunk.ts";
+import {NavLink} from "react-router-dom";
 
 const ImageCardMedia = styled(CardMedia)({
     height: '130px',
@@ -11,18 +14,23 @@ const ImageCardMedia = styled(CardMedia)({
 interface Props {
     id: string,
     title: string,
-    content: string,
     date: string,
     image: string | null,
 }
 
-const NewItem: React.FC<Props> = ({id, content, image, title, date}) => {
+const NewItem: React.FC<Props> = ({ id, image, title, date }) => {
+    const dispatch = useAppDispatch();
 
     let cardImage = imageNotAvailable;
 
-    if(image) {
+    if (image) {
         cardImage = apiURL + '/' + image;
     }
+
+    const handleDelete = async (id: string) => {
+        await dispatch(deleteNews(id));
+        await dispatch(fetchNews());
+    };
 
     return (
         <Grid sx={{
@@ -36,10 +44,12 @@ const NewItem: React.FC<Props> = ({id, content, image, title, date}) => {
             boxSizing: 'border-box',
         }} item xs key={id}>
             <ImageCardMedia image={cardImage} title={title}/>
-            <p style={{fontWeight: 'bold', fontSize: '30px', margin: 0}}>{title}</p>
-            <p style={{fontSize: '20px', margin: 0}}>{content}</p>
-            <p style={{fontSize: '20px', margin: 0}}>{date}</p>
-            <Button variant="outlined" color="error">Delete</Button>
+            <p style={{ fontWeight: 'bold', fontSize: '30px', margin: 0 }}>{title}</p>
+            <p style={{ fontSize: '20px', margin: 0 }}>{date}</p>
+            <Button variant="outlined" color="error" onClick={() => handleDelete(id)}>Delete</Button>
+            <NavLink to={`/full-post/${id}`}>
+                <Button variant="outlined">Read Full Post</Button>
+            </NavLink>
         </Grid>
     );
 };
